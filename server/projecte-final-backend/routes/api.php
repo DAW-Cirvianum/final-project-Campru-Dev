@@ -26,6 +26,10 @@ Route::post('store', [UploadController::class, 'store'])->middleware('auth:sanct
 
 Route::get('getSessions', [SessionsController::class, 'get_sessions']);
 
+Route::get('getUserSessions', [AuthController::class, 'getUserRaceSessions'])->middleware('auth:sanctum');
+
+Route::get('checkUserSession/{id}', [SessionsController::class, 'checkUserSession'])->middleware('auth:sanctum');
+
 Route::get('getData/{id}', [SessionsController::class, 'get_data']);
 
 Route::get('getDrivers/{id}', [DriverController::class, 'get_drivers']);
@@ -33,3 +37,9 @@ Route::get('getDrivers/{id}', [DriverController::class, 'get_drivers']);
 Route::get('getLaps/{id}', [LapsController::class, 'get_laps']);
 
 Route::get('getTelemetry/{id}', [TelemetryController::class, 'get_telemetry']);
+
+// CRUD
+
+Route::put('editSession/{id}', [SessionsController::class, 'editSession'])->middleware('auth:sanctum');
+
+Route::delete('deleteSession/{id}', [SessionsController::class, 'deleteSession']);

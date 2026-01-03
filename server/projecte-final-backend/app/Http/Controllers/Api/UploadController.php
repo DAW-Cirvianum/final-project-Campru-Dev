@@ -26,9 +26,11 @@ class UploadController extends Controller
 
         $request->validate([
             'file' => 'required|file|max:30240',
+            'type' => 'required|string'
         ]);
 
         $file = $request->file('file');
+        $type = $request->string('type');
 
         if ($file->getClientOriginalExtension() !== 'acreplay') {
             return response()->json(['error' => 'Extensión inválida'], 422);
@@ -47,7 +49,6 @@ class UploadController extends Controller
         $acrpBinary = base_path('bin/acrp');
         $pythonBinary = '/usr/bin/python3';
         $pythonScript = base_path('scripts/process.py');
-
 
         $acrp = new Process([
             $acrpBinary,
@@ -90,7 +91,7 @@ class UploadController extends Controller
 
         $session = Race_session::create([
             'user_id' => $userID,
-            'type' => 'race',
+            'type' => $type,
             'track' => $valorNecesario[0],
         ]);
 

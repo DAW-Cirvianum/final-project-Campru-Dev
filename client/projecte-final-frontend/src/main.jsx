@@ -6,11 +6,14 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { AuthProvider } from "./components/context";
+import { SnackbarProvider } from "notistack";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <BrowserRouter>
+  <BrowserRouter>
+    <SnackbarProvider>
       <AuthProvider>
         <App />
       </AuthProvider>
-    </BrowserRouter>
+    </SnackbarProvider>
+  </BrowserRouter>
 );

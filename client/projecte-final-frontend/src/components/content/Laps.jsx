@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdditionalData from "../tools/AdditionalData";
 import FormatLapTime from "../tools/FormatLapTime";
+import EditAndDeleteButtons from "../crud/EditAndDeleteButtons";
 
 export default function Laps() {
   const { id } = useParams();
   const [drivers, setDrivers] = useState([]);
-  const [lapsData, setLapsData] = useState({}); // laps por piloto
+  const [lapsData, setLapsData] = useState({});
   const navigate = useNavigate();
+  const [userSession, setUserSession] = useState(false);
+  let buttons = null;
+
   const API_URL = "http://localhost/api";
 
   useEffect(() => {
@@ -20,8 +24,29 @@ export default function Laps() {
         alert(error);
       }
     }
+
+    async function checkUser() {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${API_URL}/checkUserSession/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setUserSession(data);
+    }
+
     getDrivers();
+    checkUser();
   }, [id]);
+
+  if (userSession == 1) {
+
+    buttons = <EditAndDeleteButtons id={id}/>
+
+  }
 
   const fetchLaps = async (driverId) => {
     if (!lapsData[driverId]) {
@@ -38,6 +63,8 @@ export default function Laps() {
   return (
     <>
       <AdditionalData id={id} />
+
+      {buttons}
 
       <div id="accordion">
         {drivers.map((m, i) => {

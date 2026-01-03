@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Dashboard from "../content/Dashboard";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context";
 
 const API_URL = "http://localhost/api";
 
@@ -8,6 +9,7 @@ export default function Login() {
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,9 +30,11 @@ export default function Login() {
 
       const d = await response.json();
 
+      console.log(d);
+
+      login(d.user.username, d.token, d.user.id);
       localStorage.setItem("token", d.token);
       navigate("/dashboard");
-
 
     } catch (error) {
       alert(error);

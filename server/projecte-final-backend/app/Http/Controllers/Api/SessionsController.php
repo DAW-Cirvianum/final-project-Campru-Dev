@@ -88,4 +88,40 @@ class SessionsController extends Controller
         ]);
 
     }
+
+    public function checkUserSession($id, Request $request) {
+        $user = $request->user();
+
+        $race_sessions = Race_session::where('id', $id)->get();
+
+        if ($race_sessions[0]['user_id'] == $user->id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function editSession(Request $request, $id) {
+
+        $session = Race_session::find($id);
+        $session->type = $request->input('type');
+
+        $session->save();
+        
+        return response()->json("Race Session updated succesfully"); 
+
+    }
+
+    public function deleteSession($id) {
+
+        $raceSession = Race_session::find($id);
+
+        if ($raceSession) {
+            $raceSession->delete();
+        }
+
+        return response()->json("Race Session deleted succesfully");
+
+    }
+
 }

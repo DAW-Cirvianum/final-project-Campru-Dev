@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Race_session;
 use Illuminate\Http\Request;
 use Hash;
 use Illuminate\Support\Facades\Validator;
@@ -87,6 +88,16 @@ class AuthController extends Controller
             $user
         ]);
 
+    }
+
+    public function getUserRaceSessions(Request $request) {
+        $user = $request->user();
+
+        $race_sessions = Race_session::where('user_id', $user->id)->get();
+
+        return response()->json([
+            $race_sessions
+        ]);
     }
 
 }
