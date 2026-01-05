@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdditionalData from "../tools/AdditionalData";
 import FormatLapTime from "../tools/FormatLapTime";
-import EditAndDeleteButtons from "../crud/EditAndDeleteButtons";
+import EditAndDeleteButtons from "../crud/race_sessions/EditAndDeleteButtons";
 
 export default function Laps() {
   const { id } = useParams();

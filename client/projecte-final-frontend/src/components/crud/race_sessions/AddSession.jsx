@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AddSession() {
   const [file, setFile] = useState(null);
-  const [type, setType] = useState("");
+  const [type, setType] = useState("race");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
