@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\LapsController;
 use App\Http\Controllers\Api\SessionsController;
+use App\Http\Controllers\Api\SetupController;
 use App\Http\Controllers\Api\TelemetryController;
 use App\Http\Controllers\Api\UploadController;
 use Illuminate\Http\Request;
@@ -45,7 +47,7 @@ Route::put('editSession/{id}', [SessionsController::class, 'editSession'])->midd
 
 Route::delete('deleteSession/{id}', [SessionsController::class, 'deleteSession']);
 
-// CRUC Forum and comments
+// CRUD Forum and comments
 
 Route::get('getPosts', [ForumController::class, 'getPosts']);
 
@@ -70,3 +72,17 @@ Route::delete('deleteComment/{id}', [CommentController::class, 'deleteComment'])
 Route::get('checkUserPost/{id}', [ForumController::class, 'checkUserPost'])->middleware('auth:sanctum');
 
 Route::get('checkUserComment/{id}', [CommentController::class, 'checkUserComment'])->middleware('auth:sanctum');
+
+// CRUD Setup
+
+Route::get('getSetups', [SetupController::class, 'getSetups']);
+
+Route::get('getSetup/{id}', [SetupController::class, 'getSetup']);
+
+Route::post('addSetup', [SetupController::class, 'addSetup'])->middleware('auth:sanctum');
+
+// Admin rutes
+
+Route::get('userList', [AdminController::class, 'viewUsers']);
+
+Route::get('editUser', [AdminController::class, 'editUsers']);

@@ -95,7 +95,7 @@ class ForumController extends Controller
 
         $post = Forum::find( $id);
 
-        if ($post['user_id'] == $user->id) {
+        if ($post['user_id'] == $user->id || $user->role == "admin") {
             return true;
         } else {
             return false;

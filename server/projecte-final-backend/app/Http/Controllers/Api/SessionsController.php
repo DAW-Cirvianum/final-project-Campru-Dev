@@ -94,7 +94,7 @@ class SessionsController extends Controller
 
         $race_sessions = Race_session::where('id', $id)->get();
 
-        if ($race_sessions[0]['user_id'] == $user->id) {
+        if ($race_sessions[0]['user_id'] == $user->id || $user->role == "admin") {
             return true;
         } else {
             return false;

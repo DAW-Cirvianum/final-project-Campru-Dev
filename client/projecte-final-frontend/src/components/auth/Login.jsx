@@ -32,7 +32,7 @@ export default function Login() {
 
       console.log(d);
 
-      login(d.user.username, d.token, d.user.id);
+      login(d.user.username, d.token, d.user.id, d.user.role);
       localStorage.setItem("token", d.token);
       navigate("/dashboard");
 

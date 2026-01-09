@@ -19,7 +19,8 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:6', 'confirmed']
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'role' => ['required', 'string']
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +35,8 @@ class AuthController extends Controller
         $user = User::create([
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password'])
+            'password' => Hash::make($data['password']),
+            'role' => $data['role']
         ]);
 
         //$user->sendEmailVerificationNotification();
@@ -67,6 +69,11 @@ class AuthController extends Controller
                 'status' => false,
                 'message' => 'Invalid credentials'
             ], 401);
+        }
+
+        if ($user->role == 'admin') {
+            Auth::guard('web')->login($user);
+            return view('admin.userList');
         }
 
         $token = $user->createToken('api-token')->plainTextToken;

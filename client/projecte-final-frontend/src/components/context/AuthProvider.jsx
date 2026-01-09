@@ -5,7 +5,7 @@ import { AuthContext } from "./AuthContext";
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const login = (username, token, id) => setUser({ username, token, id });
+  const login = (username, token, id, role) => setUser({ username, token, id, role });
   const logout = () => setUser(null);
 
   return (

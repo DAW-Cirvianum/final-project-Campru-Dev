@@ -12,12 +12,15 @@ import AddSession from "./components/crud/race_sessions/AddSession";
 import Forum from "./components/content/Forum";
 import Post from "./components/content/Post";
 import AddPost from "./components/crud/forum/AddPost";
+import SetupsPage from "./components/content/SetupsPage";
+import AddSetup from "./components/crud/setups/AddSetup";
+import Setup from "./components/content/Setup";
 
 export default function App() {
   return (
     <div>
       <nav>
-        <Link to="/login">Login</Link> | <Link to="/register">Registre</Link> | <Link to="/forum">Forum</Link>
+        <Link to="/login">Login</Link> | <Link to="/register">Registre</Link> | <Link to="/forum">Forum</Link> | <Link to="/setups">Setups</Link>
       </nav>
 
       <Routes>
@@ -26,6 +29,12 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/post/:id" element={<Post />} />
+        <Route path="/setups" element={<SetupsPage />} />
+        <Route path="/setup/:id" element={<Setup />} />
+        
+        <Route path="/setups/createSetup" element={<ProtectedRoute />}>
+          <Route index element={<AddSetup />} />
+        </Route>
 
         <Route path="/user_race_sessions" element={<ProtectedRoute />}>
           <Route index element={<UserSessions />} />

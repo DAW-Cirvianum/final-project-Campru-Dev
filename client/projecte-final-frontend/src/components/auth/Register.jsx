@@ -17,7 +17,8 @@ export default function Register({ onRegister }) {
         "username": username,
         "email": email,
         "password": password,
-        "password_confirmation": password_repeated
+        "password_confirmation": password_repeated,
+        "role": "user"
       };
 
       console.log(userObj);

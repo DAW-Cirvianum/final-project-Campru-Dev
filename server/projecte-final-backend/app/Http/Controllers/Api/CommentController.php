@@ -109,7 +109,7 @@ class CommentController extends Controller
 
         $comment = Comment::find( $id);
 
-        if ($comment['user_id'] == $user->id) {
+        if ($comment['user_id'] == $user->id || $user->role == "admin") {
             return true;
         } else {
             return false;
