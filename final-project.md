@@ -7,5 +7,7 @@ L'objectiu d'aquest projecte és treure aquelles dades, analitzarles, tractar-le
 ### Esquema de base de dades
 Aquest projecte s'ha dut a terme mitjançant base de dades, aquest és el esquema que s'ha seguit per fer aquest projecte:
 
-![Esquema base de dades](images/logo.png)
+#### Hi ha una taula tallada a la mitad intencionadament, aquesta en el moment de la entrega no esta operativa
+![Esquema base de dades](esquema_base_de_dades.png)
 
+## Video explicatiu
