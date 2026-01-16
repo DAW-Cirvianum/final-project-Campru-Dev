@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdditionalData from "../tools/AdditionalData";
 import FormatLapTime from "../tools/FormatLapTime";
 import EditAndDeleteButtons from "../crud/race_sessions/EditAndDeleteButtons";
+import { useTranslation } from "react-i18next";
 
 export default function Laps() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ export default function Laps() {
   const navigate = useNavigate();
   const [userSession, setUserSession] = useState(false);
   let buttons = null;
+  const { t } = useTranslation();
 
   const API_URL = "http://localhost/api";
 
@@ -42,10 +44,39 @@ export default function Laps() {
     checkUser();
   }, [id]);
 
+  const [dragInfo, setDragInfo] = useState({
+    driverId: null,
+    index: null,
+  });
+
+  const handleDragStart = (driverId, index) => {
+    setDragInfo({ driverId, index });
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (driverId, dropIndex) => {
+    // seguridad
+    if (dragInfo.driverId !== driverId) return;
+
+    const driverLaps = [...lapsData[driverId]];
+    const draggedLap = driverLaps[dragInfo.index];
+
+    driverLaps.splice(dragInfo.index, 1);
+    driverLaps.splice(dropIndex, 0, draggedLap);
+
+    setLapsData((prev) => ({
+      ...prev,
+      [driverId]: driverLaps,
+    }));
+
+    setDragInfo({ driverId: null, index: null });
+  };
+
   if (userSession == 1) {
-
-    buttons = <EditAndDeleteButtons id={id}/>
-
+    buttons = <EditAndDeleteButtons id={id} />;
   }
 
   const fetchLaps = async (driverId) => {
@@ -66,62 +97,70 @@ export default function Laps() {
 
       {buttons}
 
-      <div id="accordion">
+      <div className="accordion bg-light rounded-4 shadow-sm mt-4" id="accordion" role="region" aria-label={t("drivers.accordionRegion")}>
         {drivers.map((m, i) => {
           const collapseId = `collapse-${i}`;
           const headingId = `heading-${i}`;
+          const laps = lapsData[m.id] || [];
+          const fastest = laps.length ? Math.min(...laps.map((l) => l.lap_time)) : null;
 
           return (
-            <div className="card" key={m.id}>
-              <div className="card-header" id={headingId}>
+            <div className="card border-0 rounded-0" key={m.id}>
+              {/* Header */}
+              <div
+                className="card-header bg-dark text-white px-4 py-3 border-bottom border-secondary"
+                id={headingId}
+              >
                 <h5 className="mb-0">
                   <button
-                    className="btn btn-link"
+                    className="btn btn-link text-white text-decoration-none fw-semibold fs-6"
                     data-bs-toggle="collapse"
                     data-bs-target={`#${collapseId}`}
                     aria-expanded="false"
                     aria-controls={collapseId}
                     onClick={() => fetchLaps(m.id)}
+                    aria-label={t("drivers.expandDriverButton", { driver: m.driverName })}
                   >
                     {m.driverName}
                   </button>
                 </h5>
               </div>
 
+              {/* Body */}
               <div
                 id={collapseId}
                 className="collapse"
                 aria-labelledby={headingId}
                 data-bs-parent="#accordion"
               >
-                <div className="card-body">
-                  {(() => {
-                    const laps = lapsData[m.id] || [];
+                <div className="card-body bg-body-tertiary px-4 py-4 border-bottom">
+                  {laps.map((lap, index) => (
+                    <div
+                      key={lap.id}
+                      draggable
+                      onDragStart={() => handleDragStart(m.id, index)}
+                      onDragOver={handleDragOver}
+                      onDrop={() => handleDrop(m.id, index)}
+                      className={`d-flex justify-content-between align-items-center py-3 px-3 mb-2 rounded-3 ${
+                        lap.lap_time === fastest ? "bg-success text-white" : "bg-white"
+                      }`}
+                      aria-label={t("drivers.lapItem", { number: lap.lap_number, time: lap.lap_time })}
+                    >
+                      <span>{t("drivers.lapNumber", { number: lap.lap_number })}</span>
 
-                    const fastest = laps.length
-                      ? Math.min(...laps.map((l) => l.lap_time))
-                      : null;
+                      <span>
+                        ⏱️ <FormatLapTime ms={lap.lap_time} />
+                      </span>
 
-                    return laps.map((lap) => (
-                      <div
-                        key={lap.id}
-                        className={`d-flex justify-content-around m-3 ${
-                          lap.lap_time === fastest
-                            ? "bg-success text-white"
-                            : ""
-                        }`}
+                      <button
+                        className={`btn btn-sm ${lap.lap_time === fastest ? "btn-light" : "btn-outline-primary"}`}
+                        onClick={() => navigate("/telemetry/" + lap.id)}
+                        aria-label={t("drivers.telemetryButton", { lap: lap.lap_number })}
                       >
-                        <p>Vuelta {lap.lap_number}</p>
-                        <p>Time: {<FormatLapTime ms={lap.lap_time} />}</p>
-
-                        <button
-                          onClick={() => navigate("/telemetry/" + lap.id)}
-                        >
-                          Telemetry
-                        </button>
-                      </div>
-                    ));
-                  })()}
+                        {t("drivers.telemetryButtonText")}
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

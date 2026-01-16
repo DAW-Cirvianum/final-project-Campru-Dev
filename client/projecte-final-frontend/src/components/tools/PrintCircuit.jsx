@@ -32,7 +32,14 @@ const Circuito2D = ({ posiciones }) => {
 
   }, [posiciones]);
 
-  return <canvas ref={canvasRef} width={600} height={400} />;
+  return (
+  <canvas
+    ref={canvasRef}
+    width={500}
+    height={600}
+    className="border rounded bg-light"
+  />
+);
 };
 
 export default Circuito2D;

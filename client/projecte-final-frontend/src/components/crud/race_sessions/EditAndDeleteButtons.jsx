@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function EditAndDeleteButtons({ id }) {
   const navigate = useNavigate();
   const API_URL = "http://localhost/api";
   const token = localStorage.getItem("token");
+  const { t } = useTranslation();
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -31,13 +33,21 @@ export default function EditAndDeleteButtons({ id }) {
     }
   };
 
-  return (
+ return (
     <div>
-      <button onClick={() => navigate("/edit_race_session/" + id)}>
-        {" "}
-        Edit
+      <button
+        onClick={() => navigate("/edit_race_session/" + id)}
+        aria-label={t("raceSessionActions.editButtonAria")}
+      >
+        {t("raceSessionActions.editButtonText")}
       </button>
-      <button onClick={handleDelete}>Delete</button>
+
+      <button
+        onClick={handleDelete}
+        aria-label={t("raceSessionActions.deleteButtonAria")}
+      >
+        {t("raceSessionActions.deleteButtonText")}
+      </button>
     </div>
   );
 }

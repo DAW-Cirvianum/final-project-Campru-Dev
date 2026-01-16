@@ -1,41 +1,42 @@
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import Race_sessions from "./Race_sessions";
-import { AuthContext } from "../context";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const API_URL = "http://localhost/api";
-
-  console.log(user);
-
-  const handleAdmin = async (e) => {
-    e.preventDefault();
-
-    try {
-      const redirect = fetch(`${API_URL}/userList`);
-      
-    } catch (error) {
-      console.log(error);
-    }
-
-  };
+  const { t } = useTranslation();
 
   return (
-    <>
-      <h1>Dashboard</h1>
+    <div className="container my-5" role="main">
+      <h1 className="text-center mb-4 text-primary fw-bold">
+        {t("dashboard.title")} 🏎️
+      </h1>
 
-      {user?.role === "admin" && (
-        <button onClick={handleAdmin}>Manage Users</button>
-      )}
+      <div
+        className="d-flex justify-content-center gap-3 mb-5 flex-wrap"
+        role="region"
+        aria-label={t("dashboard.actionsRegion")}
+      >
+        <button
+          className="btn btn-outline-primary btn-lg"
+          onClick={() => navigate("/user_race_sessions")}
+          aria-label={t("dashboard.userSessionsButton")}
+        >
+          {t("dashboard.userSessionsButton")}
+        </button>
+        <button
+          className="btn btn-primary btn-lg"
+          onClick={() => navigate("/add_new_session")}
+          aria-label={t("dashboard.uploadSessionButton")}
+        >
+          {t("dashboard.uploadSessionButton")}
+        </button>
+      </div>
 
-      <button onClick={ () => {navigate('/user_race_sessions')}}>User Sessions</button>
-      <button onClick={ () => {navigate('/add_new_session')}}>Upload new Session</button>
-
-      <div>
+      <div aria-label={t("dashboard.raceSessionsSection")}>
         <Race_sessions />
       </div>
-    </>
+    </div>
   );
 }

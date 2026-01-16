@@ -1,0 +1,202 @@
+{
+  "login": {
+    "title": "Login",
+    "formAriaLabel": "Login form",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email or username",
+    "emailAriaLabel": "Email input field",
+    "emailTitle": "Add email or username in this field",
+    "password": "Password",
+    "passwordAriaLabel": "Password input field",
+    "passwordTitle": "Add password in this field",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "register": "Register",
+    "forgotPassword": "Forgot your password?"
+  },
+   "register": {
+    "title": "Register",
+    "formAriaLabel": "Register form",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "usernameAriaLabel": "Username input field",
+    "usernameTitle": "Add username in this field, must be between 3 and 25 characters",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailAriaLabel": "Email input field",
+    "emailTitle": "Add a valid email in this field",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "passwordAriaLabel": "Password input field",
+    "passwordTitle": "Add password in this field, must be between 3 and 25 characters",
+    "repeatPassword": "Repeat Password",
+    "repeatPasswordPlaceholder": "Repeat your password",
+    "repeatPasswordAriaLabel": "Repeat password input field",
+    "repeatPasswordTitle": "Add password again",
+    "registerButton": "Register",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Login"
+  },
+    "forgotPassword": {
+    "title": "Forgot Password",
+    "formAriaLabel": "Forgot password form",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailAriaLabel": "Email input field",
+    "emailTitle": "Add email in this field",
+    "sendButton": "Send Reset Link",
+    "rememberedPassword": "Remembered your password?",
+    "loginLink": "Login"
+  },
+    "dashboard": {
+    "title": "Dashboard",
+    "actionsRegion": "Dashboard action buttons",
+    "userSessionsButton": "User Sessions",
+    "uploadSessionButton": "Upload new Session",
+    "raceSessionsSection": "Race sessions list"
+  },
+    "posts": {
+    "createButton": "+ Create new post",
+    "postAriaLabel": "Post titled '{{title}}' by {{username}}",
+    "viewCommentsButton": "View comments →"
+  },
+    "drivers": {
+    "accordionRegion": "Drivers and laps accordion",
+    "expandDriverButton": "Expand driver {{driver}} to see laps",
+    "lapItem": "Lap {{number}} with time {{time}} milliseconds",
+    "lapNumber": "Lap {{number}}",
+    "telemetryButton": "View telemetry for lap {{lap}}",
+    "telemetryButtonText": "Telemetry"
+  },
+    "postDetails": {
+    "postSection": "Post titled '{{title}}'",
+    "addCommentSection": "Add a new comment",
+    "commentForm": "Add comment form",
+    "commentPlaceholder": "Add a comment...",
+    "commentInputAria": "Comment input field",
+    "commentInputTitle": "Add content of the comment in this field",
+    "sendButtonText": "Send",
+    "sendButtonAria": "Send comment",
+    "commentsListSection": "Comments list"
+  },
+    "raceSessions": {
+    "searchPlaceholder": "Search race session",
+    "searchTitle": "Search race sessions by track name",
+    "searchAriaLabel": "Search race sessions",
+    "cardAriaLabel": "Race session at {{track}} of type {{type}}",
+    "viewLapsButton": "View laps for track {{track}}",
+    "viewLapsButtonText": "View Laps →"
+  },
+    "telemetry": {
+    "leftSection": "Telemetry charts section",
+    "rightSection": "Circuit section",
+    "speed": "Speed",
+    "speedLabel": "Speed (km/h)",
+    "throttle": "Throttle",
+    "throttleLabel": "Throttle",
+    "brake": "Brake",
+    "brakeLabel": "Brake",
+    "gear": "Gear",
+    "gearLabel": "Gear",
+    "circuitTitle": "Circuit",
+    "circuitAriaLabel": "2D circuit map"
+  },   
+  "createPost": {
+    "title": "Create new post",
+    "formAriaLabel": "Create post form",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Post title",
+    "titleAriaLabel": "Post title input field",
+    "titleTitle": "Add title to post",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Write your post...",
+    "contentAriaLabel": "Post content textarea",
+    "contentTitle": "Add content to post",
+    "submitButtonText": "Send",
+    "submitAriaLabel": "Submit new post"
+  },  
+  "editModal": {
+    "editButton": "Edit {{model}}",
+    "editButtonText": "Edit",
+    "deleteButton": "Delete {{model}}",
+    "deleteButtonText": "Delete",
+    "formAriaLabel": "Edit {{model}} form",
+    "modalTitle": "Edit {{model}}",
+    "titleLabel": "Title",
+    "titleInputAria": "Post title input field",
+    "titleInputTitle": "Add title to post",
+    "contentLabel": "Content",
+    "contentInputAria": "Content input field",
+    "contentInputTitle": "Add content to this field",
+    "saveButtonAria": "Save changes",
+    "saveButtonText": "Save",
+    "cancelButtonAria": "Cancel editing",
+    "cancelButtonText": "Cancel"
+  },
+    "uploadSession": {
+    "title": "Upload new session",
+    "formAriaLabel": "Upload session form",
+    "typeLabel": "Session type",
+    "typeAriaLabel": "Select session type",
+    "typeRace": "Race",
+    "typePractice": "Practice",
+    "typeQualifying": "Qualifying",
+    "fileLabel": "Replay file",
+    "fileAriaLabel": "Select replay file",
+    "submitButtonText": "Upload file",
+    "submitButtonAria": "Upload session file",
+    "loadingText": "Uploading session..."
+  }, 
+    "raceSessionActions": {
+    "editButtonText": "Edit",
+    "editButtonAria": "Edit this race session",
+    "deleteButtonText": "Delete",
+    "deleteButtonAria": "Delete this race session"
+  },
+    "editSession": {
+    "title": "Edit Session",
+    "formAriaLabel": "Edit session form",
+    "typeLabel": "Session type",
+    "typeAriaLabel": "Select session type",
+    "typeRace": "Race",
+    "typePractice": "Practice",
+    "typeQualifying": "Qualifying",
+    "submitButtonText": "Save changes",
+    "submitButtonAria": "Save changes for this session"
+  },
+    "sessionSummary": {
+    "performanceBlock": "Performance information",
+    "sessionBlock": "Session information",
+    "detailsBlock": "Session details",
+    "performance": "Performance",
+    "maxSpeed": "Max Speed",
+    "avgSpeed": "Avg Speed",
+    "maxRPM": "Max RPM",
+    "session": "Session",
+    "drivers": "Drivers",
+    "fastLap": "Fast Lap",
+    "details": "Details",
+    "uploadedBy": "Uploaded by",
+    "type": "Type",
+    "date": "Date",
+    "time": "Time"
+  },
+    "comment": {
+    "replyLabel": "Reply to comment",
+    "replyPlaceholder": "Write a reply...",
+    "replyAria": "Text area to write your reply",
+    "replyButtonText": "Reply",
+    "replySubmitAria": "Submit reply",
+    "replyButtonAria": "Reply to this comment"
+  },
+    "pagination": {
+    "ariaLabel": "Pagination Navigation",
+    "backButton": "Go to previous page",
+    "backText": "Back",
+    "nextButton": "Go to next page",
+    "nextText": "Next",
+    "pageLabel": "Go to page {{page}}"
+  }
+
+  
+}

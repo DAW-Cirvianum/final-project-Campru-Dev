@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import VerifyUserPostsAndComments from "../crud/forum/VerifyUserPostsAndComments";
 import CommentItem from "../tools/Comment";
 import { enqueueSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 export default function Post() {
   // Getting id from url params
@@ -11,6 +12,7 @@ export default function Post() {
   const [post, setPost] = useState({});
   const [comments, addComment] = useState([]);
   const [content, setContent] = useState("");
+  const { t } = useTranslation();
 
   // Setting token and API_URL
   const token = localStorage.getItem("token");
@@ -76,10 +78,9 @@ export default function Post() {
       });
 
       // If added we send message to UI
-      if(response.ok) {
+      if (response.ok) {
         enqueueSnackbar("Comment sended successfully", { variant: "success" });
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -105,36 +106,53 @@ export default function Post() {
     buttonsPosts = <VerifyUserPostsAndComments id={id} model={"post"} />;
   }
 
-  return (
-    <div>
-      {/* Showing data from post */}
-      <h1>{post["title"]}</h1>
-      <p>{post["content"]}</p>
+return (
+    <div className="container my-5" role="main">
+      {/* Post content */}
+      <section aria-label={t("postDetails.postSection", { title: post.title })}>
+        <div className="card shadow-sm mb-4 border-0">
+          <div className="card-body">
+            <h1 className="fw-bold mb-3">{post.title}</h1>
+            <p className="text-secondary">{post.content}</p>
+          </div>
+        </div>
 
-      {/* Showing component */}
-      {buttonsPosts}
+        {buttonsPosts}
+      </section>
 
-      <nav className="navbar navbar-light bg-light" onSubmit={handleSubmit}>
-        <form className="form-inline d-flex">
-          <input
-            className="form-control mr-sm-2"
-            type="text"
-            placeholder="Add Comment"
-            aria-label="Search"
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Send
-          </button>
-        </form>
-      </nav>
+      {/* Add comment form */}
+      <section aria-label={t("postDetails.addCommentSection")}>
+        <div className="card mb-4 border-0 shadow-sm">
+          <div className="card-body">
+            <form onSubmit={handleSubmit} className="d-flex gap-2" aria-label={t("postDetails.commentForm")}>
+              <input
+                className="form-control"
+                type="text"
+                placeholder={t("postDetails.commentPlaceholder")}
+                onChange={(e) => setContent(e.target.value)}
+                required
+                aria-required="true"
+                aria-label={t("postDetails.commentInputAria")}
+                title={t("postDetails.commentInputTitle")}
+              />
+              <button
+                className="btn btn-primary"
+                type="submit"
+                aria-label={t("postDetails.sendButtonAria")}
+              >
+                {t("postDetails.sendButtonText")}
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
 
-      {/* Mapping comments and adding from another component */}
-      {comments.map((m) => {
-        return (
+      {/* Comments list */}
+      <section aria-label={t("postDetails.commentsListSection")}>
+        {comments.map((m) => (
           <CommentItem key={m.id} comment={m} />
-        );
-      })}
+        ))}
+      </section>
     </div>
   );
 }

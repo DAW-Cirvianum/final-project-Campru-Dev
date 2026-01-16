@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Circuito2D from "../tools/PrintCircuit";
 import SpeedTelemetry from "../tools/SpeedTelemetry";
+import { useTranslation } from "react-i18next";
 
 export default function Telemetry() {
   const { id } = useParams();
+  const { t } = useTranslation();
 
   const API_URL = "http://localhost/api";
   const [positions, setPositions] = useState([]);
@@ -84,41 +86,74 @@ export default function Telemetry() {
   }
 
   return (
-    <>
-      <h1>Circuit</h1>
-      <Circuito2D posiciones={positions} />
+    <div className="container-fluid my-4" role="main">
+      <div className="row">
+        {/* LEFT: Telemetry charts */}
+        <section className="col-md-7" aria-label={t("telemetry.leftSection")}>
+          <div className="d-flex flex-column gap-4">
+            <div>
+              <h2 className="text-uppercase text-secondary mb-1">
+                {t("telemetry.speed")}
+              </h2>
+              <SpeedTelemetry
+                distance={distance}
+                value={speed}
+                label={t("telemetry.speedLabel")}
+                color="blue"
+              />
+            </div>
 
-      <h2>Velocitat</h2>
-      <SpeedTelemetry
-        distance={distance}
-        value={speed}
-        label={"Speed (km/h)"}
-        color={"blue"}
-      />
+            <div>
+              <h2 className="text-uppercase text-secondary mb-1">
+                {t("telemetry.throttle")}
+              </h2>
+              <SpeedTelemetry
+                distance={distance}
+                value={throttle}
+                label={t("telemetry.throttleLabel")}
+                color="green"
+              />
+            </div>
 
-      <h2>Accelerador</h2>
-      <SpeedTelemetry
-        distance={distance}
-        value={throttle}
-        label={"Throttle"}
-        color={"green"}
-      />
+            <div>
+              <h2 className="text-uppercase text-secondary mb-1">
+                {t("telemetry.brake")}
+              </h2>
+              <SpeedTelemetry
+                distance={distance}
+                value={brake}
+                label={t("telemetry.brakeLabel")}
+                color="red"
+              />
+            </div>
 
-      <h2>Freno</h2>
-      <SpeedTelemetry
-        distance={distance}
-        value={brake}
-        label={"Brake"}
-        color={"red"}
-      />
+            <div>
+              <h2 className="text-uppercase text-secondary mb-1">
+                {t("telemetry.gear")}
+              </h2>
+              <SpeedTelemetry
+                distance={distance}
+                value={gear}
+                label={t("telemetry.gearLabel")}
+                color="purple"
+              />
+            </div>
+          </div>
+        </section>
 
-      <h2>Marcha</h2>
-      <SpeedTelemetry
-        distance={distance}
-        value={gear}
-        label={"Gear"}
-        color={"purple"}
-      />
-    </>
+        {/* RIGHT: Circuit */}
+        <section className="col-md-5" aria-label={t("telemetry.rightSection")}>
+          <div className="card shadow-sm border-0 h-100">
+            <div className="card-body">
+              <h2 className="fw-bold mb-3">{t("telemetry.circuitTitle")}</h2>
+              <Circuito2D
+                posiciones={positions}
+                aria-label={t("telemetry.circuitAriaLabel")}
+              />
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }

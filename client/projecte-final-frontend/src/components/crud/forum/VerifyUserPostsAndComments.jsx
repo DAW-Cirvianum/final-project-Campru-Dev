@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 export default function VerifyUserPostsAndComments({ id, model }) {
   // Setting navigate, token and API URL
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const API_URL = "http://localhost/api";
   const token = localStorage.getItem("token");
@@ -27,7 +30,6 @@ export default function VerifyUserPostsAndComments({ id, model }) {
    * This function is used for save, UPDATE or PUT data using callApi
    */
   const handleSave = async () => {
-
     // Storing data
     const formData = new FormData();
     formData.append("content", editingContent);
@@ -38,21 +40,24 @@ export default function VerifyUserPostsAndComments({ id, model }) {
     }
 
     try {
-      // Fetching the PUT callApi 
+      // Fetching the PUT callApi
       const response = await fetch(`${API_URL}/${endpointUpdate}/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formData
+        body: formData,
       });
+
+      const data = await response.text();
 
       // if all was correct we close the modal and inform to user the model was updated successfully
       if (response.ok) {
         setIsModalOpen(false);
-        alert(`${model} updated successfully!`);
+        enqueueSnackbar(`${model} updated successfully!`, { variant: "success" });
+        navigate("/post/" + id);
       } else {
-        alert("Failed to update");
+        enqueueSnackbar(`${data} `, { variant: "error" });
       }
     } catch (error) {
       console.log(error);
@@ -61,7 +66,7 @@ export default function VerifyUserPostsAndComments({ id, model }) {
 
   /**
    * This function is used to Delete data from api
-   * @param {Event} e 
+   * @param {Event} e
    */
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -69,7 +74,7 @@ export default function VerifyUserPostsAndComments({ id, model }) {
     // Asking to user for delete the item
     if (!confirm(`Are you sure to delete this ${model}?`)) {
       // if not redirect to forum
-      navigate("/forum");
+      navigate("/post/" + id);
       return;
     }
 
@@ -84,6 +89,7 @@ export default function VerifyUserPostsAndComments({ id, model }) {
 
       // If is correct we redirect to forum
       if (response.ok) {
+        enqueueSnackbar(`${model} deleted successfully!`, { variant: "success" });
         navigate("/forum");
       }
     } catch (error) {
@@ -93,13 +99,20 @@ export default function VerifyUserPostsAndComments({ id, model }) {
 
   return (
     <div>
-      {/* Button to open modal */}
-      <button onClick={handleEditClick}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
+      {/* Buttons */}
+      <button onClick={handleEditClick} aria-label={t("editModal.editButton", { model })}>
+        {t("editModal.editButtonText")}
+      </button>
+      <button onClick={handleDelete} aria-label={t("editModal.deleteButton", { model })}>
+        {t("editModal.deleteButtonText")}
+      </button>
 
       {/* Modal */}
       {isModalOpen && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
           style={{
             position: "fixed",
             inset: 0,
@@ -120,23 +133,60 @@ export default function VerifyUserPostsAndComments({ id, model }) {
               minWidth: "300px",
             }}
           >
-            <h2>Editar {model}</h2>
-            {model === "post" ? <label htmlFor="title">Title</label> : null}
-            <br />
-            {model === "post" ? <input type="text" name="title" onChange={(e) => setEditingTitle(e.target.value)}/> : null}
-            <br />
-            <label htmlFor="content">Content</label>
-            <br />
-            <textarea
-              name="content"
-              value={editingContent}
-              onChange={(e) => setEditingContent(e.target.value)}
-              style={{ width: "100%", height: "100px", marginBottom: "10px" }}
-            />
-            <div style={{ display: "flex", gap: "10px" }}>
-              <button onClick={handleSave}>Guardar</button>
-              <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
-            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSave();
+              }}
+              aria-label={t("editModal.formAriaLabel", { model })}
+            >
+              <h2 id="modal-title">
+                {t("editModal.modalTitle", { model })}
+              </h2>
+
+              {model === "post" && (
+                <>
+                  <label htmlFor="title">{t("editModal.titleLabel")}</label>
+                  <br />
+                  <input
+                    id="title"
+                    type="text"
+                    name="title"
+                    required
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                    aria-label={t("editModal.titleInputAria")}
+                    title={t("editModal.titleInputTitle")}
+                  />
+                  <br />
+                </>
+              )}
+
+              <label htmlFor="content">{t("editModal.contentLabel")}</label>
+              <br />
+              <textarea
+                id="content"
+                name="content"
+                value={editingContent}
+                onChange={(e) => setEditingContent(e.target.value)}
+                required
+                aria-label={t("editModal.contentInputAria")}
+                title={t("editModal.contentInputTitle")}
+                style={{ width: "100%", height: "100px", marginBottom: "10px" }}
+              />
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button type="submit" aria-label={t("editModal.saveButtonAria")}>
+                  {t("editModal.saveButtonText")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  aria-label={t("editModal.cancelButtonAria")}
+                >
+                  {t("editModal.cancelButtonText")}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

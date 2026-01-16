@@ -15,26 +15,41 @@ import AddPost from "./components/crud/forum/AddPost";
 import SetupsPage from "./components/content/SetupsPage";
 import AddSetup from "./components/crud/setups/AddSetup";
 import Setup from "./components/content/Setup";
+import Forgotpassword from "./components/auth/Forgotpassword";
+import Resetpassword from "./components/auth/Resetpassword";
+import UserList from "./components/admin/Userlist";
+import EditUsers from "./components/admin/EditUser";
+import NotFound from "./NotFound";
+import Navbar from "./Navbar";
+import { useState } from "react";
+import Footer from "./Footer";
 
 export default function App() {
+
   return (
     <div>
       <nav>
-        <Link to="/login">Login</Link> | <Link to="/register">Registre</Link> | <Link to="/forum">Forum</Link> | <Link to="/setups">Setups</Link>
+        <Navbar />
       </nav>
 
       <Routes>
+
+        <Route path="/" element={<Dashboard />} />
+        <Route path="*" element={<NotFound />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot_password" element={<Forgotpassword />}/>
+        <Route path="/reset_password" element={<Resetpassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/post/:id" element={<Post />} />
-        <Route path="/setups" element={<SetupsPage />} />
+        {/* <Route path="/setups" element={<SetupsPage />} />
         <Route path="/setup/:id" element={<Setup />} />
         
         <Route path="/setups/createSetup" element={<ProtectedRoute />}>
           <Route index element={<AddSetup />} />
-        </Route>
+        </Route> */}
 
         <Route path="/user_race_sessions" element={<ProtectedRoute />}>
           <Route index element={<UserSessions />} />
@@ -54,7 +69,21 @@ export default function App() {
 
         <Route path="/laps/:id" element={<Laps />} />
         <Route path="/telemetry/:id" element={<Telemetry />} />
+
+        {/* Admin */}
+        <Route path="/manage_users" element={<ProtectedRoute />}>
+          <Route index element={<UserList />} />
+        </Route>
+
+        <Route path="/edit_user/:id" element={<ProtectedRoute />}>
+          <Route index element={<EditUsers />} />
+        </Route>
+
       </Routes>
+
+      <footer>
+          <Footer />
+      </footer>
     </div>
   );
 }

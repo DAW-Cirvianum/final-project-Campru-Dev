@@ -1,65 +1,98 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FormatLapTime from "./FormatLapTime";
+import { useTranslation } from "react-i18next";
 
-export default function AdditionalData( {id} ) {
+export default function AdditionalData({ id }) {
+  const [maxSpeed, setMaxSpeed] = useState();
+  const [avgSpeed, setAvgSpeed] = useState();
+  const [maxRPM, setMaxRPM] = useState();
+  const [numDrivers, setNumDrivers] = useState();
+  const [fastLap, setFastLap] = useState();
+  const [uploadedby, setUploadedby] = useState();
+  const [type, setType] = useState();
+  const [date, setDate] = useState();
+  const [time, setTime] = useState();
+  const API_URL = "http://localhost/api";
+  const { t } = useTranslation();
 
-    const [maxSpeed, setMaxSpeed] = useState();
-    const [avgSpeed, setAvgSpeed] = useState();
-    const [maxRPM, setMaxRPM] = useState();
-    const [numDrivers, setNumDrivers] = useState();
-    const [fastLap, setFastLap] = useState();
-    const [uploadedby, setUploadedby] = useState();
-    const [type , setType] = useState();
-    const [date, setDate] = useState();
-    const [time, setTime] = useState();
-    const API_URL = "http://localhost/api";
+  useEffect(() => {
+    async function getData() {
+      try {
+        const response = await fetch(`${API_URL}/getData/${id}`);
+        const data = await response.json();
 
-    useEffect(() => {
+        setMaxSpeed(data["max_speed"]);
+        setAvgSpeed(data["avg_speed"]);
+        setMaxRPM(data["max_rpm"]);
+        setNumDrivers(data["numberOfDrivers"]);
+        setFastLap(data["fast_lap"]);
+        setUploadedby(data["uploaded_by"]);
+        setType(data["type"]);
+        setDate(data["date"]);
+        setTime(data["time"]);
+      } catch (error) {
+        alert(error);
+      }
+    }
 
-        async function getData() {
-            try {
-                const response = await fetch(`${API_URL}/getData/${id}`);
-                const data = await response.json();
+    getData();
+  }, [id]);
 
-                setMaxSpeed(data['max_speed']);
-                setAvgSpeed(data['avg_speed']);
-                setMaxRPM(data['max_rpm']);
-                setNumDrivers(data['numberOfDrivers']);
-                setFastLap(data['fast_lap']);
-                setUploadedby(data['uploaded_by']);
-                setType(data['type']);
-                setDate(data['date']);
-                setTime(data['time']);
+  return (
+    <div className="container my-4">
+      <div className="row g-4">
+        {/* Block 1: Performance */}
+        <section className="col-md-4" aria-label={t("sessionSummary.performanceBlock")}>
+          <div className="bg-dark text-white p-4 rounded shadow-sm h-100">
+            <h2 className="text-uppercase text-secondary mb-3">{t("sessionSummary.performance")}</h2>
+            <p>
+              🚀 {t("sessionSummary.maxSpeed")}: <strong>{maxSpeed}</strong>
+            </p>
+            <p>
+              📊 {t("sessionSummary.avgSpeed")}: <strong>{avgSpeed}</strong>
+            </p>
+            <p>
+              ⚙️ {t("sessionSummary.maxRPM")}: <strong>{maxRPM}</strong>
+            </p>
+          </div>
+        </section>
 
-            } catch (error) {
-                alert(error);
-            }
-        }
+        {/* Block 2: Session */}
+        <section className="col-md-4" aria-label={t("sessionSummary.sessionBlock")}>
+          <div className="bg-dark text-white p-4 rounded shadow-sm h-100">
+            <h2 className="text-uppercase text-secondary mb-3">{t("sessionSummary.session")}</h2>
+            <p>
+              👥 {t("sessionSummary.drivers")}: <strong>{numDrivers}</strong>
+            </p>
+            <p>
+              🏁 {t("sessionSummary.fastLap")}:{" "}
+              <strong>
+                <FormatLapTime ms={fastLap} />
+              </strong>
+            </p>
+          </div>
+        </section>
 
-        getData();
-
-    }, [id]);
-
-    return (
-        <div className="d-flex justify-content-around">
-            <div>
-                <p>Max Speed: {maxSpeed}</p>
-                <p>Avg Speed: {avgSpeed}</p>
-                <p>Max RPM: {maxRPM}</p>
-            </div>
-            <div>
-                <p>Number of Drivers: {numDrivers}</p>
-                <p>Fast Lap: {<FormatLapTime ms={fastLap}/>}</p>
-            </div>
-            <div>
-                <p>Uploaded by: {uploadedby}</p>
-                <p>Type: {type}</p>
-                <p>Date: {date}</p>
-                <p>Time: {time}</p>
-            </div>
-        </div>
-    );
-
+        {/* Block 3: Details */}
+        <section className="col-md-4" aria-label={t("sessionSummary.detailsBlock")}>
+          <div className="bg-dark text-white p-4 rounded shadow-sm h-100">
+            <h2 className="text-uppercase text-secondary mb-3">{t("sessionSummary.details")}</h2>
+            <p>
+              ⬆️ {t("sessionSummary.uploadedBy")}: <strong>{uploadedby}</strong>
+            </p>
+            <p>
+              🏷️ {t("sessionSummary.type")}: <strong>{type}</strong>
+            </p>
+            <p>
+              📅 {t("sessionSummary.date")}: <strong>{date}</strong>
+            </p>
+            <p>
+              ⏰ {t("sessionSummary.time")}: <strong>{time}</strong>
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
 }
-

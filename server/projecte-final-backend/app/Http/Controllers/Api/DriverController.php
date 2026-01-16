@@ -8,7 +8,21 @@ use Illuminate\Http\Request;
 
 class DriverController extends Controller
 {
-    //
+    /**
+     * @OA\Get(
+     *     path="/api/drivers",
+     *     tags={"Drivers"},
+     *     summary="Obtener todos los drivers",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Listado de drivers",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(type="object")
+     *         )
+     *     )
+     * )
+     */
     public function get_drivers($id)
     {
 

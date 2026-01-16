@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\SessionsController;
 use App\Http\Controllers\Api\SetupController;
 use App\Http\Controllers\Api\TelemetryController;
 use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Api\RecoveryController;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,11 +20,21 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('register', [AuthController::class, 'store'])
-->name('register.user');
+    ->name('register.user');
 
 Route::post('login', [AuthController::class, 'login']);
 
 Route::get('profile', [AuthController::class, 'profile'])->middleware('auth:sanctum');
+
+Route::post('forgot_password', [RecoveryController::class, 'forgotPassword']);
+
+Route::get('/reset-password/{token}', function ($token) {
+    return redirect("http://localhost:5174/reset_password?token=$token");
+})->name('password.reset');
+
+Route::post('reset_password', [RecoveryController::class, 'resetPassword']);
+
+Route::get('getSessionsBySearch', [SessionsController::class, 'get_sessionBySearch']);
 
 Route::post('upload', [UploadController::class, 'upload_replay'])->middleware('auth:sanctum');
 
@@ -85,4 +97,12 @@ Route::post('addSetup', [SetupController::class, 'addSetup'])->middleware('auth:
 
 Route::get('userList', [AdminController::class, 'viewUsers']);
 
+Route::get('getUser/{id}', [AdminController::class, 'getUser']);
+
 Route::get('editUser', [AdminController::class, 'editUsers']);
+
+// Verification
+
+Route::get('/email/verify/{id}/{hash}', [RecoveryController::class, 'verifyEmail'])->middleware('signed')->name('verification.verify');
+
+Route::post('/email/resend', [RecoveryController::class, 'resendVerification'])->middleware('auth:sanctum');

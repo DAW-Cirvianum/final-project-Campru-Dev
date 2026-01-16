@@ -20,6 +20,52 @@ use Symfony\Component\Process\Process;
 
 class UploadController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/replays/upload",
+     *     tags={"Replays"},
+     *     summary="Subir un replay y procesar telemetría",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"file","type"},
+     *                 @OA\Property(
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Archivo .acreplay"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="type",
+     *                     type="string",
+     *                     description="Tipo de sesión (ej. 'Race', 'Qualifying')",
+     *                     example="Race"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Replay procesado correctamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Proceso completo"),
+     *             @OA\Property(property="valor", type="array", @OA\Items(type="string"), example={"Silverstone"}),
+     *             @OA\Property(property="python_output", type="string", example="Salida del script Python")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Archivo inválido o extensión incorrecta"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno al procesar replay o ejecutar scripts"
+     *     )
+     * )
+     */
 
     public function upload_replay(Request $request)
     {
@@ -33,7 +79,7 @@ class UploadController extends Controller
         $type = $request->string('type');
 
         if ($file->getClientOriginalExtension() !== 'acreplay') {
-            return response()->json(['error' => 'Extensión inválida'], 422);
+            return response()->json(['error' => 'Extension invalida'], 422);
         }
 
         // Guardar replay
@@ -141,7 +187,7 @@ class UploadController extends Controller
 
         foreach ($files as $file) {
             File::delete($file);
-            
+
         }
 
         if (File::exists($acreplayPath)) {
@@ -158,6 +204,64 @@ class UploadController extends Controller
         ]);
 
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/drivers/store",
+     *     tags={"Drivers"},
+     *     summary="Guardar datos de un piloto y sus vueltas",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"race_session_id","pilot","car","laps"},
+     *             @OA\Property(property="race_session_id", type="integer", example=5),
+     *             @OA\Property(property="pilot", type="string", example="Lewis Hamilton"),
+     *             @OA\Property(property="car", type="string", example="Mercedes AMG F1"),
+     *             @OA\Property(
+     *                 property="laps",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     required={"lap_number","lap_time","max_speed","avg_speed","max_rpm","points"},
+     *                     @OA\Property(property="lap_number", type="integer", example=1),
+     *                     @OA\Property(property="lap_time", type="number", format="float", example=89.345),
+     *                     @OA\Property(property="max_speed", type="number", format="float", example=320.5),
+     *                     @OA\Property(property="avg_speed", type="number", format="float", example=250.7),
+     *                     @OA\Property(property="max_rpm", type="integer", example=12000),
+     *                     @OA\Property(
+     *                         property="points",
+     *                         type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             required={"d","speed","throttle","brake","gear","x","y","z"},
+     *                             @OA\Property(property="d", type="number", format="float", example=0.05),
+     *                             @OA\Property(property="speed", type="number", format="float", example=150.2),
+     *                             @OA\Property(property="throttle", type="number", format="float", example=1.0),
+     *                             @OA\Property(property="brake", type="number", format="float", example=0.0),
+     *                             @OA\Property(property="gear", type="integer", example=3),
+     *                             @OA\Property(property="x", type="number", format="float", example=123.45),
+     *                             @OA\Property(property="y", type="number", format="float", example=67.89),
+     *                             @OA\Property(property="z", type="number", format="float", example=0.0)
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Datos guardados correctamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Data added succesfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación"
+     *     )
+     * )
+     */
 
     public function store(Request $request)
     {
@@ -207,7 +311,7 @@ class UploadController extends Controller
                 'lap_time' => $lapData['lap_time'],
                 'max_speed' => $lapData['max_speed'],
                 'avg_speed' => $lapData['avg_speed'],
-                'max_rpm' => $lapData['max_rpm']               
+                'max_rpm' => $lapData['max_rpm']
             ]);
 
             //Making array for do the work more quickly

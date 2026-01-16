@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import VerifyUserPostsAndComments from "../crud/forum/VerifyUserPostsAndComments";
 import { enqueueSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 export default function CommentItem({ comment }) {
   // Using useState to store values
@@ -12,6 +13,7 @@ export default function CommentItem({ comment }) {
   // Setting token and API_URL
   const token = localStorage.getItem("token");
   const API_URL = "http://localhost/api";
+  const { t } = useTranslation();
 
   // using UseEffect to know if user_logged is the owner of comment
   useEffect(() => {
@@ -63,47 +65,65 @@ export default function CommentItem({ comment }) {
   };
 
   return (
-    <div key={comment.id} className="mb-2">
-      <div className="d-flex">
-        <p>{comment.content}</p>
-        <p className="mx-5">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveComment(
-                activecomment === comment.id ? null : comment.id
-              );
-              setIdReply(comment.id);
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="#000"
-              className="bi bi-reply-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
-            </svg>
-          </a>
-        </p>
-        {canEdit && (
-          <VerifyUserPostsAndComments id={comment.id} model={"comment"} />
-        )}
+    <div key={comment.id} className="mb-4">
+      {/* Comment */}
+      <div className="card border-0 shadow-sm">
+        <div className="card-body py-3">
+          <div className="d-flex justify-content-between align-items-start">
+            {/* Content */}
+            <p className="mb-1">{comment.content}</p>
+
+            {/* Actions */}
+            <div className="d-flex align-items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveComment(activecomment === comment.id ? null : comment.id);
+                  setIdReply(comment.id);
+                }}
+                className="text-secondary btn p-0"
+                aria-label={t("comment.replyButtonAria")}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  className="bi bi-reply-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
+                </svg>
+              </button>
+
+              {canEdit && (
+                <VerifyUserPostsAndComments id={comment.id} model={"comment"} />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Comment Bar */}
+      {/* Reply box */}
       {activecomment === comment.id && (
-        <div className="mt-2">
+        <div className="ms-4 mt-2 ps-3 border-start">
+          <label htmlFor={`reply-${comment.id}`} className="visually-hidden">
+            {t("comment.replyLabel")}
+          </label>
           <textarea
-            className="form-control"
-            placeholder="Reply"
+            id={`reply-${comment.id}`}
+            className="form-control mb-2"
+            rows={2}
+            placeholder={t("comment.replyPlaceholder")}
             onChange={(e) => setReply(e.target.value)}
+            aria-label={t("comment.replyAria")}
           />
-          <button className="btn btn-sm btn-primary mt-1" onClick={handleReply}>
-            Reply
+          <button
+            className="btn btn-sm btn-primary"
+            onClick={handleReply}
+            aria-label={t("comment.replySubmitAria")}
+          >
+            {t("comment.replyButtonText")}
           </button>
         </div>
       )}
