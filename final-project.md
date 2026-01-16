@@ -10,8 +10,8 @@ Aquest projecte s'ha dut a terme mitjançant base de dades, aquest és el esquem
 #### Hi ha una taula tallada a la mitad intencionadament, aquesta en el moment de la entrega no esta operativa
 ![Esquema base de dades](esquema_base_de_dades.png)
 
-## Video explicatiu
-
+## Video explicatiu penjat a Youtube
+https://youtu.be/eK8qQFoMW88
 
 ## Fer operatiu el projecte
 - Clonar el repositori
