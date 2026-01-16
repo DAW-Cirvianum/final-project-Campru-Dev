@@ -11,3 +11,13 @@ Aquest projecte s'ha dut a terme mitjançant base de dades, aquest és el esquem
 ![Esquema base de dades](esquema_base_de_dades.png)
 
 ## Video explicatiu
+
+
+## Fer operatiu el projecte
+- Clonar el repositori
+- Editar el fitxer .env
+- Anar a la consola y situar-se a la carpeta del servidor
+- **Parar el servei apache2.service utilitzant "sudo service stop apache2.service" en cas que estigui activat, aixó donarà problemes amb el sail del servidor**
+- Executar la comanda **sail up -d**
+- Situar-se a la carpeta de client i executar npm run dev desde el vite
+- Importar una repetició per fer que la gran majoría del programa tingui usabilitat (disponible a l'arrel del repositori)
